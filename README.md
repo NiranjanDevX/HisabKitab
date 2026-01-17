@@ -1,7 +1,13 @@
-# 🧾 HisabKitab
 
-**HisabKitab** is a modern, open-source expense management web application built with **Next.js** and **FastAPI**.  
+
+<p align="center">
+  <img src="logos/hisabkitab.png" alt="HisabKitab Logo" width="180"/>
+</p>
+
+**HisabKitab** is a modern, open-source expense management platform designed for **web and mobile** users.  
 It helps users record, categorize, and analyze daily expenses in a simple, clear, and structured way.
+
+Built using **Next.js**, **FastAPI**, and **Flutter**, HisabKitab provides a seamless experience across devices.
 
 The project is designed for students, individuals living independently, and households who want better control over their day-to-day spending.
 
@@ -9,11 +15,12 @@ The project is designed for students, individuals living independently, and hous
 
 ## 🌟 Key Highlights
 
-- Clean and minimal user interface
+- Web + Mobile support
+- Clean and minimal UI
 - Fast and secure backend APIs
 - Voice-based expense entry
 - Insightful expense summaries
-- Mobile-first responsive design
+- Mobile-first & cross-platform
 - Public, open-source, and extensible
 
 ---
@@ -39,17 +46,23 @@ The project is designed for students, individuals living independently, and hous
 ### User Experience
 - JWT-based authentication
 - Secure API access
-- Responsive UI (mobile, tablet, desktop)
+- Responsive web dashboard
+- Cross-platform mobile app
 - Dark mode support
 
 ---
 
 ## 🧱 Tech Stack
 
-### Frontend
+### Frontend (Web)
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
+
+### Mobile App
+- Flutter
+- Dart
+- REST API integration
 
 ### Backend
 - FastAPI
@@ -64,27 +77,38 @@ The project is designed for students, individuals living independently, and hous
 ```
 hisabkitab/
 │
-├── frontend/
-│   ├── app/
-│   ├── components/
-│   ├── hooks/
-│   ├── lib/
-│   ├── services/
-│   ├── styles/
-│   ├── types/
-│   └── public/
+├── frontend/ # Next.js web app
+│ ├── app/
+│ ├── components/
+│ ├── hooks/
+│ ├── lib/
+│ ├── services/
+│ ├── styles/
+│ ├── types/
+│ └── public/
 │
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── db/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── main.py
-│   ├── tests/
-│   └── requirements.txt
+├── mobile/ # Flutter mobile app
+│ ├── lib/
+│ │ ├── screens/
+│ │ ├── widgets/
+│ │ ├── services/
+│ │ └── models/
+│ └── pubspec.yaml
+│
+├── backend/ # FastAPI backend
+│ ├── app/
+│ │ ├── api/
+│ │ ├── core/
+│ │ ├── db/
+│ │ ├── models/
+│ │ ├── schemas/
+│ │ ├── services/
+│ │ └── main.py
+│ ├── tests/
+│ └── requirements.txt
+│
+├── logos/
+│ └── hisabkitab.png
 │
 ├── docs/
 ├── .env.example
@@ -95,25 +119,25 @@ hisabkitab/
 
 ---
 
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - Python 3.10+
+- Flutter SDK
 - PostgreSQL or MySQL
-
 ---
 
-### Frontend Setup
+### Web App (Frontend)
 
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-
----
-
 ### Backend Setup
 
 ```bash
