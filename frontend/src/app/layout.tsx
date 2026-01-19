@@ -15,6 +15,7 @@ export const metadata: Metadata = {
         shortcut: "/logos/favicon.png",
         apple: "/logos/favicon.png",
     },
+    metadataBase: new URL("https://hisabkitab.vercel.app"),
     openGraph: {
         title: "HisabKitab - Smart Expense Management",
         description: "AI-powered insights and real-time tracking for your finances.",
