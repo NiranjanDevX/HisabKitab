@@ -7,6 +7,10 @@ backend/hisabkitab-44ab0-firebase-adminsdk-fbsvc-d4725965bf.json
 backend/hisabkitab_accessKeys.csv
 docs/HisabKitab_PRD.md
 docs/ui_animation_plan.md
+frontend/.env.local
+/frontend/.next
+/frontend/node_modules
+/reference
 /reference
 backend/hisabkitab_accessKeys.csv
 backend/hisabkitab_accessKeys.csv
