@@ -1,2 +1,9 @@
 docs/HisabKitab_PRD.md
 docs/ui_animation_plan.md
+backend/.env
+*.pyc
+frontend/.env.local
+backend/hisabkitab-44ab0-firebase-adminsdk-fbsvc-d4725965bf.json
+/frontend/.next
+/frontend/node_modules
+/reference
