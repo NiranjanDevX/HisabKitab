@@ -1,2 +1,6 @@
 docs/HisabKitab_PRD.md
 docs/ui_animation_plan.md
+frontend/.env.local
+/frontend/.next
+/frontend/node_modules
+/reference
