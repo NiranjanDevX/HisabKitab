@@ -22,7 +22,7 @@ class CategoryService:
             .where(Category.user_id == user_id)
             .order_by(Category.name)
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
     
     async def get_category(self, category_id: int, user_id: int) -> Optional[Category]:
         """Get a specific category"""
