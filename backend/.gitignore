@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Distribution / Build
+build/
+dist/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Firebase Admin SDK Key (JSON file)
+hisabkitab-*-firebase-adminsdk-*.json
+firebase-credentials.json
+service-account.json
+
+# Local database
+*.db
+*.sqlite3

@@ -16,6 +16,9 @@ from app.models.category import Category
 from app.models.budget import Budget
 from app.models.notification import Notification
 from app.models.event import Event
+from app.models.goal import Goal
+from app.models.group import Group, GroupMember, ExpenseSplit
+from app.models.audit import AuditLog
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
