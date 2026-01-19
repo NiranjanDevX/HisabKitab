@@ -1,0 +1,4 @@
+/**
+ * Category features export
+ */
+export {};
