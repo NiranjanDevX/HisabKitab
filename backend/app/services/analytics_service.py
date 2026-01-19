@@ -53,7 +53,7 @@ class AnalyticsService:
             select(
                 func.sum(Expense.amount).label("total"),
                 func.avg(Expense.amount).label("average"),
-                func.count(Expense.id).label("count")
+                func.count(Expense.id).label("count_val")
             ).where(
                 and_(
                     Expense.user_id == user_id,
@@ -66,9 +66,9 @@ class AnalyticsService:
         
         summary = SpendingSummary(
             period=period,
-            total=row.total or 0.0,
-            average=row.average or 0.0,
-            count=row.count or 0,
+            total=float(row[0]) if row[0] else 0.0,
+            average=float(row[1]) if row[1] else 0.0,
+            count=int(row[2]) if row[2] else 0,
             start_date=start_date,
             end_date=end_date
         )
@@ -105,7 +105,7 @@ class AnalyticsService:
             select(
                 Expense.category_id,
                 func.sum(Expense.amount).label("total"),
-                func.count(Expense.id).label("count")
+                func.count(Expense.id).label("count_val")
             ).where(
                 and_(
                     Expense.user_id == user_id,
@@ -124,13 +124,13 @@ class AnalyticsService:
                 category = cat_result.scalar_one_or_none()
                 if category:
                     breakdowns.append(CategoryBreakdown(
-                        category_id=category.id,
-                        category_name=category.name,
-                        category_icon=category.icon,
-                        category_color=category.color,
-                        total=row.total,
-                        percentage=(row.total / total * 100) if total > 0 else 0,
-                        count=row.count
+                        category_id=int(category.id), # type: ignore
+                        category_name=str(category.name),
+                        category_icon=str(category.icon) if getattr(category, 'icon') else None,
+                        category_color=str(category.color) if getattr(category, 'color') else None,
+                        total=float(row[1]),
+                        percentage=(float(row[1]) / total * 100) if total > 0 else 0,
+                        count=int(row[2])
                     ))
         
         return sorted(breakdowns, key=lambda x: x.total, reverse=True)

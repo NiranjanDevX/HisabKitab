@@ -1,7 +1,7 @@
 """
 Budget Service
 """
-from typing import Optional, List
+from typing import Optional, List, Any, cast
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, func
@@ -28,9 +28,12 @@ class BudgetService:
         for budget in budgets:
             spent = await self._calculate_spent(budget)
             response = BudgetResponse.model_validate(budget)
-            response.spent = spent
-            response.remaining = max(0, budget.amount - spent)
-            response.percentage_used = (spent / budget.amount * 100) if budget.amount > 0 else 0
+            response.spent = cast(Any, spent)
+            response.remaining = float(max(0, cast(Any, budget.amount) - cast(Any, spent)))
+            if cast(Any, budget.amount) > 0:
+                response.percentage_used = float(cast(Any, spent) / cast(Any, budget.amount) * 100)
+            else:
+                response.percentage_used = 0.0
             budget_responses.append(response)
         
         return budget_responses
@@ -40,9 +43,9 @@ class BudgetService:
         now = datetime.utcnow()
         
         # Determine period start date
-        if budget.period == "daily":
+        if str(budget.period) == "daily":
             start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        elif budget.period == "weekly":
+        elif str(budget.period) == "weekly":
             start_date = now - timedelta(days=now.weekday())
             start_date = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
         else:  # monthly
@@ -56,7 +59,7 @@ class BudgetService:
             )
         )
         
-        if budget.category_id:
+        if cast(Any, budget).category_id:
             query = query.where(Expense.category_id == budget.category_id)
         
         result = await self.db.execute(query)
@@ -80,9 +83,12 @@ class BudgetService:
         
         spent = await self._calculate_spent(budget)
         response = BudgetResponse.model_validate(budget)
-        response.spent = spent
-        response.remaining = max(0, budget.amount - spent)
-        response.percentage_used = (spent / budget.amount * 100) if budget.amount > 0 else 0
+        response.spent = cast(Any, spent)
+        response.remaining = float(max(0, cast(Any, budget.amount) - cast(Any, spent)))
+        if cast(Any, budget.amount) > 0:
+            response.percentage_used = float(cast(Any, spent) / cast(Any, budget.amount) * 100)
+        else:
+            response.percentage_used = 0.0
         return response
     
     async def create_budget(self, user_id: int, budget_data: BudgetCreate) -> Budget:
