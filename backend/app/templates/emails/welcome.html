@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to HisabKitab</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f6f9fc;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .logo img {
+        height: 40px;
+      }
+      .content {
+        color: #333333;
+        line-height: 1.6;
+      }
+      h1 {
+        color: #1a1a1a;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .button {
+        display: block;
+        width: fit-content;
+        margin: 30px auto;
+        padding: 14px 32px;
+        background-color: #4f46e5;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .footer {
+        text-align: center;
+        color: #888888;
+        font-size: 12px;
+        margin-top: 30px;
+        border-top: 1px solid #eeeeee;
+        padding-top: 20px;
+      }
+      .social-links {
+        margin-top: 10px;
+      }
+      .social-links a {
+        color: #888888;
+        text-decoration: none;
+        margin: 0 5px;
+      }
+      .features {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f8fafc;
+        border-radius: 8px;
+      }
+      .feature-item {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: start;
+      }
+      .feature-icon {
+        margin-right: 10px;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img
+          src="https://hisabkitab.vercel.app/logos/hisabkitab.png"
+          alt="HisabKitab Logo"
+        />
+      </div>
+      <h1>Welcome to HisabKitab! 🚀</h1>
+      <div class="content">
+        <p>Hi {{ name }},</p>
+        <p>
+          We're thrilled to have you on board! You've taken the first step
+          towards smarter financial management.
+        </p>
+
+        <div class="features">
+          <p style="margin-top: 0; font-weight: 600">Here's what you can do:</p>
+          <div class="feature-item">
+            <span class="feature-icon">📊</span>
+            <span>Track daily expenses with ease</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🎙️</span>
+            <span>Add expenses using voice commands</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🤖</span>
+            <span>Get AI-powered financial insights</span>
+          </div>
+        </div>
+
+        <p>Ready to get started?</p>
+        <a href="{{ dashboard_url }}" class="button">Go to Dashboard</a>
+      </div>
+      <div class="footer">
+        <p>&copy; 2026 HisabKitab. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#">Twitter</a> • <a href="#">LinkedIn</a> •
+          <a href="#">Website</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
