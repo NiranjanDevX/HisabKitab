@@ -5,3 +5,8 @@ frontend/.env.local
 backend/.env
 backend/hisabkitab-44ab0-firebase-adminsdk-fbsvc-d4725965bf.json
 backend/hisabkitab_accessKeys.csv
+docs/HisabKitab_PRD.md
+docs/ui_animation_plan.md
+/reference
+backend/hisabkitab_accessKeys.csv
+backend/hisabkitab_accessKeys.csv
