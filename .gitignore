@@ -10,3 +10,7 @@ docs/ui_animation_plan.md
 /reference
 backend/hisabkitab_accessKeys.csv
 backend/hisabkitab_accessKeys.csv
+/frontend/.next
+/frontend/node_modules
+reference/config.py
+frontend/.env.local
