@@ -2,6 +2,8 @@
 #    uv export --no-hashes --output-file requirements.txt
 aiofiles==23.2.1
     # via hisabkitab-backend
+openai>=1.0.0
+huggingface_hub>=0.20.0
 alembic==1.13.1
     # via hisabkitab-backend
 amqp==5.3.1
@@ -19,7 +21,7 @@ async-timeout==5.0.1 ; python_full_version < '3.11.3'
     #   redis
 asyncpg==0.31.0
     # via hisabkitab-backend
-bcrypt==4.1.2
+bcrypt==3.2.2
     # via
     #   hisabkitab-backend
     #   passlib

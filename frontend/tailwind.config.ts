@@ -10,38 +10,50 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: "#f0f9ff",
-          100: "#e0f2fe",
-          200: "#bae6fd",
-          300: "#7dd3fc",
-          400: "#38bdf8",
-          500: "#0ea5e9",
-          600: "#0284c7",
-          700: "#0369a1",
-          800: "#075985",
-          900: "#0c4a6e",
-          950: "#082f49",
+          50: "#f0f7ff",
+          100: "#e0eefe",
+          200: "#bae0fd",
+          300: "#7cc4fd",
+          400: "#37a2f9",
+          500: "#0b84e3", // Brighter, more vibrant blue
+          600: "#0266bc",
+          700: "#035197",
+          800: "#07447d",
+          900: "#0c3a68",
+          950: "#082544",
         },
-        secondary: {
-          50: "#f5f3ff",
-          100: "#ede9fe",
-          200: "#ddd6fe",
-          300: "#c4b5fd",
-          400: "#a78bfa",
-          500: "#8b5cf6",
-          600: "#7c3aed",
-          700: "#6d28d9",
-          800: "#5b21b6",
-          900: "#4c1d95",
-          950: "#2e1065",
+        accent: {
+          blue: "#3b82f6",
+          indigo: "#6366f1",
+          emerald: "#10b981",
+          rose: "#f43f5e",
+          amber: "#f59e0b",
         },
-        background: "#0a0a0a",
+        dark: {
+          950: "#050505", // True black for high contrast
+          900: "#0a0a0a", // Deep grey
+          800: "#121212",
+          700: "#1a1a1a",
+          600: "#262626",
+        },
+        background: "#050505",
         foreground: "#ffffff",
+      },
+      borderRadius: {
+        "2xl": "1rem",
+        "3xl": "1.5rem",
+        "4xl": "2rem",
+      },
+      boxShadow: {
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+        "glass-accent": "0 8px 32px 0 rgba(59, 130, 246, 0.2)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "mesh-dark":
+          "radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(244, 63, 94, 0.1) 0px, transparent 50%)",
       },
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
