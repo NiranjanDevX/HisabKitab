@@ -1,7 +1,17 @@
+"use client";
+
 import React from 'react';
-import { Card } from '@/components/ui/Card';
-import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, Sparkles } from 'lucide-react';
+import { DashboardCard } from '@/components/ui/DashboardCard';
+import {
+    DollarSign,
+    Activity,
+    TrendingUp,
+    PieChart,
+    ArrowUpRight,
+    ArrowDownRight
+} from 'lucide-react';
 import { SpendingSummary } from '@/services/analyticsService';
+import { cn } from '@/lib/utils';
 
 interface SummaryCardsProps {
     summary: SpendingSummary;
@@ -12,64 +22,80 @@ interface SummaryCardsProps {
 export function SummaryCards({ summary, topCategory, hasAIInsight }: SummaryCardsProps) {
     const cards = [
         {
-            title: 'Total Spent',
+            title: 'Monthly Spending',
             value: `₹${summary.total.toLocaleString()}`,
-            icon: <DollarSign className="h-6 w-6 text-primary-500" />,
+            icon: <DollarSign size={20} />,
             description: 'Total expenses this month',
-            trend: summary.total > 0 ? '+12%' : '0%', // Mock trend for now
-            trendType: 'up'
+            trend: '+12.5%',
+            trendType: 'up',
+            color: 'blue'
         },
         {
-            title: 'Daily Average',
+            title: 'Average Daily',
             value: `₹${summary.average.toLocaleString()}`,
-            icon: <Activity className="h-6 w-6 text-secondary-500" />,
+            icon: <Activity size={20} />,
             description: 'Average daily spending',
+            trend: '-2.4%',
+            trendType: 'down',
+            color: 'indigo'
         },
         {
             title: 'Transactions',
             value: summary.count.toString(),
-            icon: <TrendingUp className="h-6 w-6 text-green-500" />,
+            icon: <TrendingUp size={20} />,
             description: 'Total count this month',
+            trend: '+5%',
+            trendType: 'up',
+            color: 'emerald'
         },
         {
             title: 'Top Category',
             value: topCategory || 'N/A',
-            icon: <PieChart className="h-6 w-6 text-purple-500" />,
+            icon: <PieChart size={20} />,
             description: 'Most expensive category',
+            color: 'rose'
         },
     ];
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {cards.map((card, idx) => (
-                <Card key={idx} className="relative overflow-hidden group">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="p-2 rounded-lg bg-gray-800/50 group-hover:bg-gray-800 transition-colors">
+                <DashboardCard key={idx} className="relative overflow-hidden group">
+                    <div className="flex items-start justify-between mb-4">
+                        <div className={cn(
+                            "p-3 rounded-2xl bg-white/5 border border-white/5 transition-colors group-hover:bg-white/10",
+                            card.color === 'blue' && "text-primary-400",
+                            card.color === 'indigo' && "text-accent-indigo",
+                            card.color === 'emerald' && "text-accent-emerald",
+                            card.color === 'rose' && "text-accent-rose",
+                        )}>
                             {card.icon}
                         </div>
-                        <div className="flex items-center space-x-2">
-                            {idx === 0 && hasAIInsight && (
-                                <span className="flex items-center space-x-1 text-[10px] font-bold text-primary-500 bg-primary-500/10 px-2 py-1 rounded-full animate-pulse">
-                                    <Sparkles size={10} />
-                                    <span>AI Insight</span>
-                                </span>
-                            )}
-                            {card.trend && (
-                                <span className={`text-xs font-medium px-2 py-1 rounded-full ${card.trendType === 'up' ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'
-                                    }`}>
-                                    {card.trend}
-                                </span>
-                            )}
-                        </div>
+                        {card.trend && (
+                            <div className={cn(
+                                "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase",
+                                card.trendType === 'up' ? "bg-rose-500/10 text-rose-500" : "bg-emerald-500/10 text-emerald-500"
+                            )}>
+                                {card.trendType === 'up' ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                                {card.trend}
+                            </div>
+                        )}
                     </div>
-                    <div className="space-y-1">
-                        <h3 className="text-sm font-medium text-gray-400">{card.title}</h3>
-                        <p className="text-2xl font-bold text-white tracking-tight">{card.value}</p>
-                        <p className="text-xs text-gray-500">{card.description}</p>
+
+                    <div className="relative z-10">
+                        <p className="text-xs font-medium text-gray-500 mb-1 uppercase tracking-widest">{card.title}</p>
+                        <h3 className="text-2xl font-bold text-white tracking-tight mb-1">{card.value}</h3>
+                        <p className="text-[10px] text-gray-600 font-medium">{card.description}</p>
                     </div>
-                    {/* Subtle decoration */}
-                    <div className="absolute -right-2 -bottom-2 h-16 w-16 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-all"></div>
-                </Card>
+
+                    <div className={cn(
+                        "absolute -right-4 -bottom-4 w-24 h-24 blur-3xl opacity-10 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none",
+                        card.color === 'blue' && "bg-primary-500",
+                        card.color === 'indigo' && "bg-accent-indigo",
+                        card.color === 'emerald' && "bg-accent-emerald",
+                        card.color === 'rose' && "bg-accent-rose",
+                    )} />
+                </DashboardCard>
             ))}
         </div>
     );
