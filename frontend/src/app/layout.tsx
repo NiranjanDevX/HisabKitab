@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     keywords: ["expense tracker", "budget manager", "AI finance", "Gemini AI", "personal finance", "HisabKitab"],
     authors: [{ name: "HisabKitab Team" }],
     icons: {
-        icon: "/logos/favicon.png",
-        shortcut: "/logos/favicon.png",
-        apple: "/logos/favicon.png",
+        icon: "/logos/hisabkitab.png",
+        shortcut: "/logos/hisabkitab.png",
+        apple: "/logos/hisabkitab.png",
     },
     metadataBase: new URL("https://hisabkitab.vercel.app"),
     openGraph: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     },
 };
 
-import { Navbar } from "@/components/layout";
+import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import { AIChatAssistant } from "@/components/features/ai/AIChatAssistant";
 
 export default function RootLayout({
@@ -45,8 +45,9 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <Providers>
-                    <Navbar />
-                    {children}
+                    <LayoutWrapper>
+                        {children}
+                    </LayoutWrapper>
                     <AIChatAssistant />
                 </Providers>
             </body>

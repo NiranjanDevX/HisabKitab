@@ -1,20 +1,12 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-    Download,
-    Plus,
-    Sparkles,
-    TrendingUp,
-    DollarSign,
-    ArrowUpRight,
-    ArrowDownRight,
-    RefreshCw
+    RefreshCw,
+    Sparkles
 } from 'lucide-react';
 import { exportService } from '@/services/exportService';
-import { useNotification } from '@/context/NotificationContext';
 import { SummaryCards } from '@/components/features/analytics/SummaryCards';
 import { ExpenseTrend } from '@/components/features/analytics/ExpenseTrend';
 import { CategoryBreakdown } from '@/components/features/analytics/CategoryBreakdown';
@@ -23,6 +15,7 @@ import { AddExpenseModal } from '@/components/features/expenses/AddExpenseModal'
 import { analyticsService, AnalyticsResponse } from '@/services/analyticsService';
 import { expenseService, Expense } from '@/services/expenseService';
 import { aiService } from '@/services/aiService';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 
 export default function DashboardPage() {
     const [data, setData] = useState<AnalyticsResponse | null>(null);
@@ -36,7 +29,7 @@ export default function DashboardPage() {
         try {
             const [analytics, recent, ai] = await Promise.all([
                 analyticsService.getDashboardData(),
-                expenseService.getExpenses(5), // Fix: Pass number directly as per existing service method
+                expenseService.getExpenses(5),
                 aiService.getInsights()
             ]);
             setData(analytics);
@@ -55,10 +48,14 @@ export default function DashboardPage() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="flex items-center justify-center min-h-screen">
                 <div className="flex flex-col items-center space-y-4">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-                    <p className="text-gray-500 text-sm font-medium animate-pulse">Syncing with Gemini AI...</p>
+                    <div className="relative">
+                        <div className="w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-500/20 animate-pulse flex items-center justify-center">
+                            <RefreshCw className="text-primary-500 animate-spin" size={24} />
+                        </div>
+                    </div>
+                    <p className="text-gray-500 text-xs font-black uppercase tracking-[0.2em] animate-pulse">Syncing Engine</p>
                 </div>
             </div>
         );
@@ -66,15 +63,15 @@ export default function DashboardPage() {
 
     if (!data) {
         return (
-            <div className="text-center py-20 flex flex-col items-center">
-                <div className="h-20 w-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
-                    <RefreshCw className="text-red-500" size={40} />
+            <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
+                <div className="h-24 w-24 bg-rose-500/10 rounded-3xl flex items-center justify-center mb-8 border border-rose-500/20">
+                    <RefreshCw className="text-rose-500" size={32} />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Sync Error</h2>
-                <p className="text-gray-400 max-w-sm mx-auto mb-8">Could not load dashboard data from the neural engine. Please check your connection.</p>
+                <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">Sync Failure</h2>
+                <p className="text-gray-500 max-w-sm mx-auto mb-10 text-sm leading-relaxed">The neural engine could not retrieve your financial data at this time. Please re-establish connection.</p>
                 <button
                     onClick={fetchData}
-                    className="px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all font-bold"
+                    className="px-8 py-4 bg-white text-dark-950 rounded-2xl hover:bg-white/90 transition-all font-black uppercase text-xs tracking-widest shadow-xl shadow-white/5"
                 >
                     Retry Connection
                 </button>
@@ -83,82 +80,70 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gray-900/40 p-8 rounded-[2.5rem] border border-white/5 glass">
-                <div>
-                    <h1 className="text-4xl font-black text-white tracking-tight">System Stats</h1>
-                    <p className="text-gray-400 mt-1 font-medium italic">"Financial freedom is learned, not inherited."</p>
-                </div>
-                <div className="flex items-center space-x-4">
-                    <button
-                        onClick={() => exportService.exportToCSV()}
-                        className="flex items-center space-x-2 px-5 py-3 bg-gray-800/50 border border-white/5 rounded-2xl text-sm font-bold text-white hover:bg-gray-800 transition-all"
-                    >
-                        <Download size={18} className="text-gray-400" />
-                        <span>Export CSV</span>
-                    </button>
-                    <button
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="flex items-center space-x-2 px-6 py-3 bg-primary-600 rounded-2xl text-sm font-bold text-white hover:bg-primary-500 transition-all shadow-xl shadow-primary-900/30"
-                    >
-                        <Plus size={18} />
-                        <span>Log Expense</span>
-                    </button>
-                </div>
-            </header>
+        <div className="p-6 md:p-10 lg:p-12 min-h-screen">
+            <DashboardHeader
+                title="System Overview"
+                onAddLog={() => setIsAddModalOpen(true)}
+                onExport={() => exportService.exportToCSV()}
+            />
 
-            {insights.length > 0 && (
+            <div className="space-y-10 max-w-[1600px] mx-auto">
+                {insights.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {insights.map((insight: string, idx: number) => (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                key={idx}
+                                className="glass bg-primary-500/5 border-primary-500/10 rounded-2xl p-4 flex items-start gap-4"
+                            >
+                                <div className="p-2 rounded-xl bg-primary-500/10 text-primary-500">
+                                    <Sparkles size={16} />
+                                </div>
+                                <p className="text-[11px] text-primary-200/80 leading-relaxed font-bold italic">"{typeof insight === 'string' ? insight : 'Neural analysis incomplete'}"</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
+
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                 >
-                    {insights.map((insight: string, idx: number) => (
-                        <div key={idx} className="bg-primary-600/10 border border-primary-500/20 rounded-2xl p-4 flex items-start space-x-3">
-                            <Sparkles className="text-primary-500 mt-1 flex-shrink-0" size={16} />
-                            <p className="text-xs text-primary-200 leading-relaxed font-medium">{insight}</p>
-                        </div>
-                    ))}
+                    <SummaryCards
+                        summary={data.summary}
+                        topCategory={data.category_breakdown[0]?.category_name}
+                        hasAIInsight={insights.length > 0}
+                    />
                 </motion.div>
-            )}
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <SummaryCards
-                    summary={data.summary}
-                    topCategory={data.category_breakdown[0]?.category_name}
-                    hasAIInsight={insights.length > 0}
-                />
-            </motion.div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <motion.div
+                        className="lg:col-span-2"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <ExpenseTrend data={data.recent_trends} />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <CategoryBreakdown data={data.category_breakdown} />
+                    </motion.div>
+                </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <motion.div
-                    className="lg:col-span-2"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
                 >
-                    <ExpenseTrend data={data.recent_trends} />
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                    <CategoryBreakdown data={data.category_breakdown} />
+                    <RecentTransactions transactions={transactions} />
                 </motion.div>
             </div>
-
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-            >
-                <RecentTransactions transactions={transactions} />
-            </motion.div>
 
             <AddExpenseModal
                 isOpen={isAddModalOpen}
