@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, Loader2, Sparkles, X } from 'lucide-react';
 import { aiService } from '@/services/aiService';
 import { useNotification } from '@/context/NotificationContext';
+import { Button } from '@/components/ui/Button';
 
 interface VoiceInputProps {
     onResult: (data: any) => void;
@@ -19,7 +20,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
 
     // Initialize Speech Recognition
     const startListening = useCallback(() => {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
             showNotification('Speech recognition is not supported in this browser.', 'error');
             return;
@@ -41,11 +42,8 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
             setTranscript(result);
         };
 
-        recognition.onend = async () => {
+        recognition.onend = () => {
             setIsListening(false);
-            if (transcript) {
-                processVoice(transcript);
-            }
         };
 
         recognition.onerror = (event: any) => {
@@ -55,17 +53,19 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
         };
 
         recognition.start();
-    }, [transcript, showNotification]);
+    }, [showNotification]);
 
-    const processVoice = async (text: string) => {
+    const processVoice = async () => {
+        if (!transcript) return;
         setIsProcessing(true);
         try {
-            const result = await aiService.parseVoice(text);
+            const result = await aiService.parseVoice(transcript);
             if (result.success) {
                 onResult(result.data);
                 showNotification('Voice command parsed!', 'success');
             } else {
-                showNotification(result.error || 'Could not parse expense detail.', 'error');
+                const errorMsg = typeof result.error === 'string' ? result.error : 'Could not parse expense detail.';
+                showNotification(errorMsg, 'error');
             }
         } catch (error) {
             showNotification('Failed to process voice command.', 'error');
@@ -97,7 +97,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
                 </button>
             </div>
 
-            <div className="flex flex-col items-center justify-center space-y-6 py-4">
+            <div className="flex flex-col items-center justify-center space-y-6">
                 <div className="relative">
                     {isListening && (
                         <>
@@ -105,11 +105,6 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
                                 animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.1, 0.3] }}
                                 transition={{ repeat: Infinity, duration: 2 }}
                                 className="absolute inset-0 bg-primary-500 rounded-full blur-xl"
-                            />
-                            <motion.div
-                                animate={{ scale: [1, 1.8, 1], opacity: [0.2, 0, 0.2] }}
-                                transition={{ repeat: Infinity, duration: 2.5, delay: 0.5 }}
-                                className="absolute inset-0 bg-secondary-500 rounded-full blur-2xl"
                             />
                         </>
                     )}
@@ -123,19 +118,34 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onResult, onClose }) => 
                         ) : isProcessing ? (
                             <Loader2 size={32} className="text-primary-500 animate-spin" />
                         ) : (
-                            <MicOff size={32} className="text-gray-400" />
+                            <Mic size={32} className="text-gray-400" />
                         )}
                     </button>
                 </div>
 
-                <div className="text-center">
-                    <p className="text-lg font-medium text-white min-h-[1.5rem]">
-                        {transcript || (isListening ? 'Listening...' : isProcessing ? 'Processing with AI...' : 'Tap mic to start')}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-2">
+                <div className="w-full space-y-4">
+                    <textarea
+                        className="w-full bg-gray-950/50 border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 min-h-[80px]"
+                        value={transcript}
+                        onChange={(e) => setTranscript(e.target.value)}
+                        placeholder='Tap mic and say: "Spent 500 on dinner at McDonalds"'
+                    />
+
+                    <Button
+                        onClick={processVoice}
+                        disabled={!transcript || isProcessing}
+                        className="w-full py-3 flex items-center justify-center space-x-2"
+                    >
+                        {isProcessing ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
+                        <span>{isProcessing ? 'AI Parsing...' : 'Parse Expense'}</span>
+                    </Button>
+                </div>
+
+                {!isListening && !isProcessing && !transcript && (
+                    <p className="text-xs text-gray-500 text-center">
                         Try: "Spent 500 on dinner at McDonalds"
                     </p>
-                </div>
+                )}
             </div>
         </motion.div>
     );
