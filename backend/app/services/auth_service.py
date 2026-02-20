@@ -101,6 +101,10 @@ class AuthService:
                 user.profile_pic = profile_pic
                 should_update = True
             
+            if not user.is_verified:
+                 user.is_verified = True
+                 should_update = True
+            
             if should_update:
                 await self.db.commit()
                 await self.db.refresh(user)

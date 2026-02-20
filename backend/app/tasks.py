@@ -11,18 +11,45 @@ from app.utils.logger import logger
 def send_email_task(to: str, subject: str, html_content: str):
     """
     Background task to send an email using Resend.
-    Since celery tasks are synchronous by default, we run the async email service here.
+    Ensures safe async execution even if an event loop is already running (e.g., in eager mode).
     """
-    try:
-        # Check if there's a running loop, otherwise create one
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+
+    def run_async(coro):
+        """Run a coroutine in a new event loop in a separate thread."""
+        new_loop = asyncio.new_event_loop()
         try:
-            loop = asyncio.get_event_loop()
+            asyncio.set_event_loop(new_loop)
+            return new_loop.run_until_complete(coro)
+        finally:
+            new_loop.close()
+
+    try:
+        # Check if we should even send emails
+        from app.core.config import settings
+        if not getattr(settings, "ENABLE_EMAIL_NOTIFICATIONS", True):
+            logger.info("Email notifications are disabled. Skipping.")
+            return "Email notifications disabled"
+
+        # Try to get the current loop
+        loop = None
+        try:
+            loop = asyncio.get_running_loop()
         except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            pass
+
+        if loop and loop.is_running():
+            # If a loop is already running (common in eager mode within FastAPI),
+            # run the async work in a separate thread.
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(run_async, email_service.send_email(to, subject, html_content))
+                future.result()
+        else:
+            # No running loop, just create one and run (standard sync context)
+            asyncio.run(email_service.send_email(to, subject, html_content))
             
-        loop.run_until_complete(email_service.send_email(to, subject, html_content))
-        return f"Email sent to {to}"
+        return f"Email task processed for {to}"
     except Exception as e:
         logger.error(f"Failed to send email task: {e}")
         return f"Failed to send email to {to}: {e}"

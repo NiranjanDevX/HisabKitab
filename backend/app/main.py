@@ -41,6 +41,8 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         
+    print(f"--> [DEBUG] Active CORS Origins: {settings.CORS_ORIGINS}")
+    
     # Firebase Initialization
     if settings.FIREBASE_PROJECT_ID:
         try:
@@ -91,15 +93,6 @@ def create_app() -> FastAPI:
     # Templates
     templates = Jinja2Templates(directory="app/templates")
 
-    # CORS Middleware
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.CORS_ORIGINS,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
     # Custom Middleware
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -107,6 +100,15 @@ def create_app() -> FastAPI:
     app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(LoggingMiddleware)
     app.add_middleware(ErrorHandlerMiddleware)
+    
+    # CORS Middleware (Must be last to be the outermost)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     
     # Prometheus Metrics
     from prometheus_fastapi_instrumentator import Instrumentator

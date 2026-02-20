@@ -71,8 +71,14 @@ class Settings(BaseSettings):
     FIREBASE_CLIENT_ID: Optional[str] = None
     FIREBASE_CLIENT_X509_CERT_URL: Optional[str] = None
     
-    # Resend
-    RESEND_API_KEY: Optional[str] = None
+    # SMTP (Email Service)
+    SMTP_HOST: Optional[str] = None
+    SMTP_PORT: int = 587
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+    SMTP_FROM_EMAIL: Optional[str] = None
+    SMTP_TLS: bool = True
+    SMTP_SSL: bool = False
     
     # AWS S3 for Profile Pics
     AWS_ACCESS_KEY_ID: Optional[str] = None
@@ -80,18 +86,25 @@ class Settings(BaseSettings):
     AWS_REGION: str = "us-east-1"
     S3_BUCKET_NAME: Optional[str] = None
     
-    # Google Gemini AI
-    GEMINI_API_KEY: str = ""
+    # AI Configuration (LongCat & Hugging Face)
+    LONGCAT_API_KEY: Optional[str] = None
+    HF_API_KEY: Optional[str] = None
     
     # Feature Flags
     ENABLE_AI_FEATURES: bool = True
     ENABLE_VOICE_INPUT: bool = True
     ENABLE_OCR: bool = True
     ENABLE_3D_UI: bool = True
+    ENABLE_EMAIL_NOTIFICATIONS: bool = True
     
     # CORS
     CORS_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:3001"]
+        default=[
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500"
+        ]
     )
     FRONTEND_URL: str = "http://localhost:3000"
     

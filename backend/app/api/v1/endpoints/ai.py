@@ -47,6 +47,16 @@ async def suggest_category(
     return suggestion
 
 
+@router.post("/suggest-category", include_in_schema=False)
+async def suggest_category_alias(
+    request: CategorySuggestionRequest,
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Alias for /categorize to support cached clients"""
+    return await suggest_category(request, current_user, db)
+
+
 @router.get("/insights")
 async def get_ai_insights(
     current_user: User = Depends(get_current_active_user),
