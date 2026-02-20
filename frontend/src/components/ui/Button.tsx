@@ -1,4 +1,6 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
@@ -15,35 +17,38 @@ export const Button: React.FC<ButtonProps> = ({
     disabled,
     ...props
 }) => {
-    const baseStyles = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseStyles = 'relative inline-flex items-center justify-center rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden';
 
     const variants = {
-        primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-lg shadow-primary-900/20',
-        secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 shadow-lg shadow-secondary-900/20',
-        outline: 'border-2 border-primary-600 text-primary-400 hover:bg-primary-600/10 focus:ring-primary-500',
-        ghost: 'text-primary-400 hover:bg-primary-600/10 focus:ring-primary-500',
-        danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+        primary: 'bg-primary-600 text-white hover:bg-primary-500 shadow-xl shadow-primary-500/20 border border-primary-400/20',
+        secondary: 'bg-white text-dark-950 hover:bg-white/90 shadow-xl shadow-white/5',
+        outline: 'border border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.08] hover:border-white/20',
+        ghost: 'text-gray-400 hover:text-white hover:bg-white/5',
+        danger: 'bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white',
     };
 
     const sizes = {
-        sm: 'px-3 py-1.5 text-sm',
-        md: 'px-5 py-2.5 text-base',
-        lg: 'px-8 py-3 text-lg',
+        sm: 'px-4 py-2',
+        md: 'px-6 py-3.5',
+        lg: 'px-10 py-5 text-xs',
     };
 
     return (
-        <button
-            className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+        <motion.button
+            whileTap={{ scale: 0.98 }}
+            className={cn(baseStyles, variants[variant], sizes[size], className)}
             disabled={isLoading || disabled}
             {...props}
         >
             {isLoading ? (
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+                <div className="mr-3">
+                    <svg className="animate-spin h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
             ) : null}
-            {children}
-        </button>
+            <span className="relative z-10 flex items-center justify-center gap-2 w-full">{children}</span>
+        </motion.button>
     );
 };

@@ -1,42 +1,24 @@
-import axios from "axios";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+import api from "../lib/api";
 
 class AIService {
-  private getHeaders() {
-    const token = localStorage.getItem("token");
-    return {
-      Authorization: `Bearer ${token}`,
-    };
-  }
-
   async getInsights() {
-    const response = await axios.get(`${API_URL}/ai/insights`, {
-      headers: this.getHeaders(),
-    });
+    const response = await api.get("/ai/insights");
     return response.data;
   }
 
   async chat(message: string) {
-    const response = await axios.post(
-      `${API_URL}/ai/chat`,
-      { message },
-      {
-        headers: this.getHeaders(),
-      },
-    );
+    const response = await api.post("/ai/chat", { message });
     return response.data;
   }
 
   async suggestCategory(description: string, amount: number) {
-    const response = await axios.post(
-      `${API_URL}/ai/suggest-category`,
-      { description, amount },
-      {
-        headers: this.getHeaders(),
-      },
-    );
+    // Backend supports both /categorize and /suggest-category
+    const response = await api.post("/ai/categorize", { description, amount });
+    return response.data;
+  }
+
+  async parseVoice(message: string) {
+    const response = await api.post("/ai/parse-voice", { message });
     return response.data;
   }
 }

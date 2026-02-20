@@ -58,22 +58,39 @@ const config: Config = {
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         blob: "blob 7s infinite",
+        shake: "shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
+        "float": "float 6s ease-in-out infinite",
+        "float-delay": "float 6s ease-in-out 2s infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        "border-flow": "border-flow 4s linear infinite",
       },
       keyframes: {
         blob: {
-          "0%": {
-            transform: "translate(0px, 0px) scale(1)",
-          },
-          "33%": {
-            transform: "translate(30px, -50px) scale(1.1)",
-          },
-          "66%": {
-            transform: "translate(-20px, 20px) scale(0.9)",
-          },
-          "100%": {
-            transform: "translate(0px, 0px) scale(1)",
-          },
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-4px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(4px)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-20px) rotate(5deg)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.4", filter: "blur(40px)" },
+          "50%": { opacity: "0.7", filter: "blur(60px)" },
+        },
+        "border-flow": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "200% 50%" },
+        },
+      },
+      backgroundSize: {
+        "flow": "200% 200%",
       },
     },
   },
